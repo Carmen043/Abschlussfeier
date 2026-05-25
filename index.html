@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Abschlussfest Klasse 4 · 2026</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f5f3ef;
+      color: #333;
+      min-height: 100vh;
+      padding: 2rem 1rem 4rem;
+    }
+
+    .container {
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    header h1 {
+      font-size: 22px;
+      font-weight: 600;
+      color: #2a2a2a;
+      margin-bottom: 4px;
+    }
+
+    header p {
+      font-size: 13px;
+      color: #999;
+    }
+
+    .section {
+      background: #fff;
+      border: 0.5px solid #e8e5de;
+      border-radius: 14px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 500;
+      padding: 2px 9px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+      background: #ddeefb;
+      color: #2c6fa6;
+    }
+
+    .badge-green {
+      background: #d8f0e4;
+      color: #2a7a4f;
+    }
+
+    h3 {
+      font-size: 15px;
+      font-weight: 500;
+      color: #3a3a3a;
+      margin-bottom: 12px;
+    }
+
+    label {
+      font-size: 13px;
+      color: #888;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    input[type=text] {
+      width: 100%;
+      font-size: 14px;
+      padding: 9px 12px;
+      border: 0.5px solid #d5d2ca;
+      border-radius: 9px;
+      background: #fafaf8;
+      color: #333;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    input[type=text]:focus { border-color: #4a9ad4; }
+
+    input[type=number] {
+      width: 72px;
+      font-size: 14px;
+      padding: 7px 10px;
+      border: 0.5px solid #d5d2ca;
+      border-radius: 9px;
+      background: #fafaf8;
+      color: #333;
+      outline: none;
+      text-align: center;
+    }
+
+    .grill-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .grill-label {
+      font-size: 14px;
+      color: #444;
+      min-width: 120px;
+    }
+
+    .grill-unit {
+      font-size: 13px;
+      color: #bbb;
+    }
+
+    .group-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: #aaa;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      margin: 16px 0 8px;
+    }
+
+    .group-label:first-child { margin-top: 0; }
+
+    .hint {
+      font-size: 12px;
+      color: #bbb;
+      margin-bottom: 14px;
+    }
+
+    .buffet-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 7px;
+    }
+
+    .buffet-item {
+      border: 0.5px solid #e0ddd6;
+      border-radius: 9px;
+      padding: 9px 12px;
+      cursor: pointer;
+      background: #fafaf8;
+      transition: border-color 0.15s, background 0.15s;
+      user-select: none;
+    }
+
+    .buffet-item:not(.taken):hover {
+      border-color: #b0c8e8;
+      background: #f0f6fd;
+    }
+
+    .buffet-item.selected {
+      border: 1.5px solid #4a9ad4;
+      background: #eaf4fd;
+    }
+
+    .buffet-item.taken {
+      background: #f2f1ee;
+      cursor: not-allowed;
+      opacity: 0.65;
+    }
+
+    .buffet-item-name {
+      font-size: 13px;
+      font-weight: 500;
+      color: #333;
+      display: block;
+    }
+
+    .buffet-item-owner {
+      font-size: 11px;
+      color: #bbb;
+      display: block;
+      margin-top: 2px;
+    }
+
+    .buffet-item.selected .buffet-item-owner { color: #4a9ad4; }
+    .buffet-item.taken .buffet-item-name { color: #999; }
+
+    #msg {
+      font-size: 13px;
+      color: #3a8f5c;
+      margin: 8px 0 4px;
+      min-height: 20px;
+      text-align: center;
+    }
+
+    #msg.err { color: #c0392b; }
+
+    .btn-submit {
+      width: 100%;
+      padding: 11px;
+      font-size: 15px;
+      font-weight: 500;
+      border-radius: 10px;
+      border: none;
+      background: #5aaa78;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.15s;
+      margin-top: 6px;
+    }
+
+    .btn-submit:hover { background: #479a65; }
+    .btn-submit:active { background: #3d8a58; }
+
+    hr {
+      border: none;
+      border-top: 0.5px solid #eeebe4;
+      margin: 1.5rem 0;
+    }
+
+    .overview-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .reset-btn {
+      font-size: 12px;
+      color: #ccc;
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    .reset-btn:hover { color: #999; }
+
+    .sec-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: #bbb;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .summary-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .summary-chip {
+      font-size: 12px;
+      background: #f2f0ec;
+      border: 0.5px solid #e0ddd6;
+      border-radius: 20px;
+      padding: 3px 10px;
+      color: #666;
+    }
+
+    .entry-list {
+      list-style: none;
+    }
+
+    .entry-list li {
+      padding: 10px 0;
+      border-bottom: 0.5px solid #eeebe4;
+    }
+
+    .entry-list li:last-child { border-bottom: none; }
+
+    .tag-family {
+      font-size: 11px;
+      color: #2c6fa6;
+      background: #ddeefb;
+      border-radius: 10px;
+      padding: 2px 8px;
+      font-weight: 600;
+    }
+
+    .entry-details {
+      margin-top: 6px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .entry-chip {
+      font-size: 11px;
+      background: #f2f0ec;
+      border: 0.5px solid #e0ddd6;
+      border-radius: 10px;
+      padding: 2px 8px;
+      color: #555;
+    }
+
+    .empty {
+      font-size: 13px;
+      color: #ccc;
+      font-style: italic;
+    }
+
+    @media (max-width: 420px) {
+      .buffet-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <h1>Abschlussfest Klasse 4 🎉</h1>
+    <p>Grill & Buffet Anmeldung · 2026</p>
+  </header>
+
+  <div class="section">
+    <div class="badge">Schritt 1 von 3</div>
+    <h3>Familienname</h3>
+    <input type="text" id="familyName" placeholder="z.B. Familie Müller" maxlength="40">
+  </div>
+
+  <div class="section">
+    <div class="badge">Schritt 2 von 3</div>
+    <h3>Grillgut <span style="font-size:12px; font-weight:400; color:#bbb">(Portionen)</span></h3>
+    <div class="grill-row">
+      <span class="grill-label">🥩 Fleisch</span>
+      <input type="number" id="g_fleisch" min="0" max="20" value="0">
+      <span class="grill-unit">Portionen</span>
+    </div>
+    <div class="grill-row">
+      <span class="grill-label">🌭 Würstl</span>
+      <input type="number" id="g_wurst" min="0" max="20" value="0">
+      <span class="grill-unit">Portionen</span>
+    </div>
+    <div class="grill-row">
+      <span class="grill-label">🧀 Grillkäse</span>
+      <input type="number" id="g_kaese" min="0" max="20" value="0">
+      <span class="grill-unit">Portionen</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="badge">Schritt 3 von 3</div>
+    <h3>Buffet</h3>
+    <p class="hint">Mehrere Gerichte wählbar · nochmal klicken zum Abwählen · belegte Felder sind ausgegraut</p>
+    <div id="buffetGrid"></div>
+  </div>
+
+  <div id="msg"></div>
+  <button class="btn-submit" onclick="submitEntry()">Eintragen ✓</button>
+
+  <hr>
+
+  <div class="section">
+    <div class="overview-header">
+      <div>
+        <div class="badge badge-green">Anmeldungen</div>
+        <h3 style="margin-bottom:0">Übersicht</h3>
+      </div>
+      <button class="reset-btn" onclick="resetAll()">Zurücksetzen</button>
+    </div>
+    <div class="sec-label">Grillgut gesamt</div>
+    <div class="summary-row" id="grillSummary"><span class="empty">Noch keine Einträge</span></div>
+    <div class="sec-label">Familien & Buffet</div>
+    <ul class="entry-list" id="entryList"><li class="empty">Noch keine Einträge.</li></ul>
+  </div>
+
+</div>
+
+<script>
+  const DATA_KEY = 'fest_entries_v5';
+  const BUFFET_GROUPS = [
+    { label: "🥗 Salate", items: ["Nudelsalat","Kartoffelsalat","Blattsalat","Gurkensalat","Tomatensalat","Coleslaw","Caprese","Reissalat"] },
+    { label: "🫙 Dips", items: ["Tzatziki","Hummus","Guacamole","Kräuterquark","Salsa"] },
+    { label: "🍞 Gebäck", items: ["Brot & Brötchen","Baguette","Knoblauchbaguette","Laugengebäck","Focaccia"] },
+    { label: "🍰 Desserts", items: ["Obstsalat","Kuchen","Brownies","Gummibärchen"] },
+    { label: "🍿 Knabberkrams", items: ["Chips","Salzstangen","Nussmix","Popcorn","Cracker"] }
+  ];
+
+  let entries = [];
+  try { entries = JSON.parse(localStorage.getItem(DATA_KEY) || '[]'); } catch(e) {}
+  let selected = new Set();
+
+  function save() { try { localStorage.setItem(DATA_KEY, JSON.stringify(entries)); } catch(e) {} }
+
+  function takenBy(item) {
+    return entries.find(e => e.buffet && e.buffet.includes(item));
+  }
+
+  function renderBuffet() {
+    const container = document.getElementById('buffetGrid');
+    container.innerHTML = '';
+    BUFFET_GROUPS.forEach(group => {
+      const lbl = document.createElement('div');
+      lbl.className = 'group-label';
+      lbl.textContent = group.label;
+      container.appendChild(lbl);
+      const grid = document.createElement('div');
+      grid.className = 'buffet-grid';
+      group.items.forEach(item => {
+        const owner = takenBy(item);
+        const isSel = selected.has(item);
+        const div = document.createElement('div');
+        div.className = 'buffet-item' + (owner ? ' taken' : (isSel ? ' selected' : ''));
+        div.innerHTML = `<span class="buffet-item-name">${item}</span><span class="buffet-item-owner">${owner ? 'Fam. ' + owner.family : (isSel ? '✓ ausgewählt' : '')}</span>`;
+        if (!owner) div.onclick = () => { selected.has(item) ? selected.delete(item) : selected.add(item); renderBuffet(); };
+        grid.appendChild(div);
+      });
+      container.appendChild(grid);
+    });
+  }
+
+  function renderSummary() {
+    const fl = entries.reduce((s,e) => s+(e.fleisch||0), 0);
+    const wu = entries.reduce((s,e) => s+(e.wurst||0), 0);
+    const ka = entries.reduce((s,e) => s+(e.kaese||0), 0);
+    const div = document.getElementById('grillSummary');
+    if (!entries.length) { div.innerHTML = '<span class="empty">Noch keine Einträge</span>'; return; }
+    div.innerHTML = `<span class="summary-chip">🥩 Fleisch: ${fl}</span><span class="summary-chip">🌭 Würstl: ${wu}</span><span class="summary-chip">🧀 Grillkäse: ${ka}</span>`;
+  }
+
+  function renderList() {
+    const ul = document.getElementById('entryList');
+    if (!entries.length) { ul.innerHTML = '<li class="empty">Noch keine Einträge.</li>'; return; }
+    ul.innerHTML = entries.map(e => {
+      const chips = (e.buffet||[]).map(b => `<span class="entry-chip">${b}</span>`).join('');
+      return `<li><span class="tag-family">Fam. ${e.family}</span><div class="entry-details"><span class="entry-chip">🥩 ${e.fleisch}</span><span class="entry-chip">🌭 ${e.wurst}</span><span class="entry-chip">🧀 ${e.kaese}</span>${chips}</div></li>`;
+    }).join('');
+  }
+
+  function submitEntry() {
+    const name = document.getElementById('familyName').value.trim();
+    const fl = parseInt(document.getElementById('g_fleisch').value) || 0;
+    const wu = parseInt(document.getElementById('g_wurst').value) || 0;
+    const ka = parseInt(document.getElementById('g_kaese').value) || 0;
+    const buffet = Array.from(selected);
+    const msg = document.getElementById('msg');
+    if (!name) { msg.className = 'err'; msg.textContent = 'Bitte Familienname eingeben.'; return; }
+    if (entries.find(e => e.family.toLowerCase() === name.toLowerCase())) {
+      msg.className = 'err'; msg.textContent = 'Diese Familie hat sich bereits eingetragen.'; return;
+    }
+    entries.push({ family: name, fleisch: fl, wurst: wu, kaese: ka, buffet });
+    save();
+    msg.className = ''; msg.textContent = `Fam. "${name}" erfolgreich eingetragen!`;
+    document.getElementById('familyName').value = '';
+    document.getElementById('g_fleisch').value = 0;
+    document.getElementById('g_wurst').value = 0;
+    document.getElementById('g_kaese').value = 0;
+    selected = new Set();
+    renderBuffet(); renderSummary(); renderList();
+  }
+
+  function resetAll() {
+    if (!confirm('Alle Einträge wirklich löschen?')) return;
+    entries = []; selected = new Set();
+    try { localStorage.removeItem(DATA_KEY); } catch(e) {}
+    document.getElementById('msg').textContent = '';
+    renderBuffet(); renderSummary(); renderList();
+  }
+
+  renderBuffet(); renderSummary(); renderList();
+</script>
+</body>
+</html>
