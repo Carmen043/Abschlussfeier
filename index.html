@@ -145,14 +145,14 @@
       const list = document.createElement('div');
       list.className = 'buffet-list';
       group.items.forEach(item => {
-        const owner = buffetData[item];
+        const owner = (buffetData[item] && typeof buffetData[item] === 'string' && buffetData[item].length > 0) ? buffetData[item] : null;
         const isSel = selected.has(item);
         const row = document.createElement('div');
         row.className = 'buffet-row' + (owner ? ' taken' : (isSel ? ' selected' : ''));
         row.innerHTML = `
           <div class="buffet-check">${(owner || isSel) ? '✓' : ''}</div>
           <span class="buffet-row-name">${item}</span>
-          <span class="buffet-row-owner">${owner ? 'Fam. ' + owner : (isSel ? 'ausgewählt' : '')}</span>
+          <span class="buffet-row-owner">${owner ? 'Fam. ' + owner : (isSel ? 'nochmal klicken zum Abwählen' : '')}</span>
         `;
         if (!owner) row.onclick = () => { selected.has(item) ? selected.delete(item) : selected.add(item); renderBuffet(); };
         list.appendChild(row);
