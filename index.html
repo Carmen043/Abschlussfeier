@@ -63,8 +63,20 @@
 <div class="container">
   <header>
     <h1>Abschlussfest Klasse 4 🎉</h1>
-    <p>Grill & Buffet Anmeldung · 2026</p>
+    <p>Freitag, 31. Juli 2026</p>
   </header>
+
+  <div class="section" style="background:#fffef5; border-color:#e8e3c8;">
+    <p style="font-size:14px; color:#555; line-height:1.6;">
+      Unser Abschlussfest rückt näher! Damit wir gut planen können, bitten wir alle Familien, sich hier einzutragen.
+    </p>
+    <p style="font-size:13px; color:#888; line-height:1.6; margin-top:10px;">
+      <strong style="color:#555;">Schritt 1</strong> &mdash; Gebt euren Familiennamen ein.<br>
+      <strong style="color:#555;">Schritt 2</strong> &mdash; Tragt ein, wie viele Portionen Grillgut ihr möchtet.<br>
+      <strong style="color:#555;">Schritt 3</strong> &mdash; Wählt aus, was ihr zum Buffet mitbringt. Jedes Gericht kann nur einmal vergeben werden &mdash; bereits belegte Positionen sind ausgegraut und zeigen den Namen der Familie.<br><br>
+      Am Ende auf <strong style="color:#555;">„Eintragen"</strong> klicken &mdash; fertig! Ihr könnt jederzeit nachschauen, wer was mitbringt.<br><br><strong style="color:#c0392b;">Bitte sorgfältig ausfüllen:</strong> Nach dem Eintragen kann der Eintrag nicht mehr geändert werden.
+    </p>
+  </div>
 
   <div class="section">
     <div class="badge">Schritt 1 von 3</div>
@@ -75,9 +87,11 @@
   <div class="section">
     <div class="badge">Schritt 2 von 3</div>
     <h3>Grillgut <span style="font-size:12px;font-weight:400;color:#bbb">(Portionen)</span></h3>
-    <div class="grill-row"><span class="grill-label">🥩 Fleisch</span><input type="number" id="g_fleisch" min="0" max="20" value="0"><span class="grill-unit">Portionen</span></div>
-    <div class="grill-row"><span class="grill-label">🌭 Würstl</span><input type="number" id="g_wurst" min="0" max="20" value="0"><span class="grill-unit">Portionen</span></div>
     <div class="grill-row"><span class="grill-label">🧀 Grillkäse</span><input type="number" id="g_kaese" min="0" max="20" value="0"><span class="grill-unit">Portionen</span></div>
+    <div class="grill-row"><span class="grill-label">🌱 Veggi Wurst</span><input type="number" id="g_veggi" min="0" max="20" value="0"><span class="grill-unit">Portionen</span></div>
+    <div class="grill-row"><span class="grill-label">🌭 Bratwurst</span><input type="number" id="g_brat" min="0" max="20" value="0"><span class="grill-unit">Portionen</span></div>
+    <div class="grill-row"><span class="grill-label">🍡 Nürnberger</span><input type="number" id="g_nuernb" min="0" max="20" value="0"><span class="grill-unit">Portionen</span></div>
+    <div class="grill-row"><span class="grill-label">🍔 Burger (klein)</span><input type="number" id="g_burger" min="0" max="20" value="0"><span class="grill-unit">Portionen</span></div>
   </div>
 
   <div class="section">
@@ -110,11 +124,11 @@
   const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
   const BUFFET_GROUPS = [
-    { label: "🥗 Salate", items: ["Nudelsalat","Kartoffelsalat","Blattsalat","Gurkensalat","Tomatensalat","Coleslaw","Caprese","Reissalat"] },
-    { label: "🫙 Dips", items: ["Tzatziki","Hummus","Guacamole","Kräuterquark","Salsa"] },
-    { label: "🍞 Gebäck", items: ["Brot & Brötchen","Baguette","Knoblauchbaguette","Laugengebäck","Focaccia"] },
-    { label: "🍰 Desserts", items: ["Obstsalat","Kuchen","Brownies","Gummibärchen"] },
-    { label: "🍿 Knabberkrams", items: ["Chips","Salzstangen","Nussmix","Popcorn","Cracker"] }
+    { label: "🥗 Salate", items: ["Tomate-Mozzi","Gemischter Salat","Gurkensalat","Tomatensalat","Coleslaw","Nudelsalat","Couscoussalat","Kartoffelsalat"] },
+    { label: "🫙 Dips & Aufstriche", items: ["Gemüsesticks mit Dip","Kräuterbutter","Aufstrich/Dip"] },
+    { label: "🍞 Gebäck", items: ["Baguette (4 Stück)","Brot (geschnitten)"] },
+    { label: "🍰 Desserts", items: ["Obstplatte (für Schokobrunnen)","Schokokuchen","Käsekuchen","Blechkuchen Obst","Limokuchen","Marmorkuchen","Muffins (ca. 20 Stück)"] },
+    { label: "🍿 Knabberkrams", items: ["Chips (5 Packungen)","Salzstangen (5 Packungen)","Salzbrezeln (5 Packungen)"] }
   ];
 
   let selected = new Set();
@@ -162,12 +176,14 @@
   }
 
   function renderSummary() {
-    const fl = familienData.reduce((s,e) => s+(e.fleisch||0), 0);
-    const wu = familienData.reduce((s,e) => s+(e.wurst||0), 0);
     const ka = familienData.reduce((s,e) => s+(e.kaese||0), 0);
+    const ve = familienData.reduce((s,e) => s+(e.veggi||0), 0);
+    const br = familienData.reduce((s,e) => s+(e.brat||0), 0);
+    const nu = familienData.reduce((s,e) => s+(e.nuernb||0), 0);
+    const bu = familienData.reduce((s,e) => s+(e.burger||0), 0);
     const div = document.getElementById('grillSummary');
     if (!familienData.length) { div.innerHTML = '<span class="empty">Noch keine Einträge</span>'; return; }
-    div.innerHTML = `<span class="summary-chip">🥩 Fleisch: ${fl}</span><span class="summary-chip">🌭 Würstl: ${wu}</span><span class="summary-chip">🧀 Grillkäse: ${ka}</span>`;
+    div.innerHTML = `<span class="summary-chip">🧀 Grillkäse: ${ka}</span><span class="summary-chip">🌱 Veggi: ${ve}</span><span class="summary-chip">🌭 Bratwurst: ${br}</span><span class="summary-chip">🍡 Nürnberger: ${nu}</span><span class="summary-chip">🍔 Burger: ${bu}</span>`;
   }
 
   function renderList() {
@@ -180,15 +196,17 @@
     });
     ul.innerHTML = familienData.map(e => {
       const chips = (familyBuffet[e.name] || []).map(b => `<span class="entry-chip">${b}</span>`).join('');
-      return `<li><span class="tag-family">Fam. ${e.name}</span><div class="entry-details"><span class="entry-chip">🥩 ${e.fleisch}</span><span class="entry-chip">🌭 ${e.wurst}</span><span class="entry-chip">🧀 ${e.kaese}</span>${chips}</div></li>`;
+      return `<li><span class="tag-family">Fam. ${e.name}</span><div class="entry-details"><span class="entry-chip">🧀 ${e.kaese}</span><span class="entry-chip">🌱 ${e.veggi}</span><span class="entry-chip">🌭 ${e.brat}</span><span class="entry-chip">🍡 ${e.nuernb}</span><span class="entry-chip">🍔 ${e.burger}</span>${chips}</div></li>`;
     }).join('');
   }
 
   async function submitEntry() {
     const name = document.getElementById('familyName').value.trim();
-    const fl = parseInt(document.getElementById('g_fleisch').value) || 0;
-    const wu = parseInt(document.getElementById('g_wurst').value) || 0;
     const ka = parseInt(document.getElementById('g_kaese').value) || 0;
+    const ve = parseInt(document.getElementById('g_veggi').value) || 0;
+    const br = parseInt(document.getElementById('g_brat').value) || 0;
+    const nu = parseInt(document.getElementById('g_nuernb').value) || 0;
+    const bu = parseInt(document.getElementById('g_burger').value) || 0;
     const buffet = Array.from(selected);
     const msg = document.getElementById('msg');
     const btn = document.getElementById('submitBtn');
@@ -198,7 +216,7 @@
     btn.disabled = true;
     msg.className = ''; msg.textContent = 'Wird gespeichert...';
 
-    const { error: famError } = await sb.from('familien').insert({ name, fleisch: fl, wurst: wu, kaese: ka });
+    const { error: famError } = await sb.from('familien').insert({ name, kaese: ka, veggi: ve, brat: br, nuernb: nu, burger: bu });
     if (famError) {
       msg.className = 'err';
       msg.textContent = famError.code === '23505' ? 'Diese Familie hat sich bereits eingetragen.' : 'Fehler beim Speichern.';
@@ -219,9 +237,11 @@
 
     msg.className = ''; msg.textContent = `Fam. "${name}" erfolgreich eingetragen!`;
     document.getElementById('familyName').value = '';
-    document.getElementById('g_fleisch').value = 0;
-    document.getElementById('g_wurst').value = 0;
     document.getElementById('g_kaese').value = 0;
+    document.getElementById('g_veggi').value = 0;
+    document.getElementById('g_brat').value = 0;
+    document.getElementById('g_nuernb').value = 0;
+    document.getElementById('g_burger').value = 0;
     selected = new Set();
     btn.disabled = false;
     await loadData();
