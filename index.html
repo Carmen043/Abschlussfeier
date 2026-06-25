@@ -123,12 +123,41 @@
   const SUPABASE_KEY = 'sb_publishable_Jrb-xj3-H7ZrOEVNZyUV1A_ljqgq_yD';
   const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+  // items: [label, id] - label wird angezeigt, id ist unique in Supabase
   const BUFFET_GROUPS = [
-    { label: "🥗 Salate", items: ["Tomate-Mozzi","Gemischter Salat","Gurkensalat","Tomatensalat","Coleslaw","Nudelsalat","Couscoussalat","Kartoffelsalat"] },
-    { label: "🫙 Dips & Aufstriche", items: ["Gemüsesticks mit Dip","Kräuterbutter","Aufstrich/Dip"] },
-    { label: "🍞 Gebäck", items: ["Baguette (4 Stück)","Brot (geschnitten)"] },
-    { label: "🍰 Desserts", items: ["Obstplatte (für Schokobrunnen)","Schokokuchen","Käsekuchen","Blechkuchen Obst","Limokuchen","Marmorkuchen","Muffins (ca. 20 Stück)"] },
-    { label: "🍿 Knabberkrams", items: ["Chips (5 Packungen)","Salzstangen (5 Packungen)","Salzbrezeln (5 Packungen)"] }
+    { label: "🥗 Salate", items: [
+      ["Tomate-Mozzi","tomate-mozzi-1"],["Tomate-Mozzi","tomate-mozzi-2"],["Tomate-Mozzi","tomate-mozzi-3"],["Tomate-Mozzi","tomate-mozzi-4"],
+      ["Gemischter Salat","gem-salat-1"],["Gemischter Salat","gem-salat-2"],["Gemischter Salat","gem-salat-3"],
+      ["Gurkensalat","gurkensalat-1"],["Gurkensalat","gurkensalat-2"],
+      ["Tomatensalat","tomatensalat-1"],
+      ["Coleslaw","coleslaw-1"],
+      ["Nudelsalat","nudelsalat-1"],["Nudelsalat","nudelsalat-2"],["Nudelsalat","nudelsalat-3"],
+      ["Couscoussalat","couscoussalat-1"],["Couscoussalat","couscoussalat-2"],
+      ["Kartoffelsalat","kartoffelsalat-1"],["Kartoffelsalat","kartoffelsalat-2"],["Kartoffelsalat","kartoffelsalat-3"]
+    ]},
+    { label: "🫙 Dips & Aufstriche", items: [
+      ["Gemüsesticks mit Dip","gemuese-dip-1"],["Gemüsesticks mit Dip","gemuese-dip-2"],["Gemüsesticks mit Dip","gemuese-dip-3"],
+      ["Kräuterbutter","kraeuterbutter-1"],["Kräuterbutter","kraeuterbutter-2"],
+      ["Aufstrich/Dip","aufstrich-1"],["Aufstrich/Dip","aufstrich-2"],["Aufstrich/Dip","aufstrich-3"],["Aufstrich/Dip","aufstrich-4"]
+    ]},
+    { label: "🍞 Gebäck", items: [
+      ["Baguette (4 Stück)","baguette-1"],["Baguette (4 Stück)","baguette-2"],["Baguette (4 Stück)","baguette-3"],["Baguette (4 Stück)","baguette-4"],["Baguette (4 Stück)","baguette-5"],
+      ["Brot geschnitten","brot-1"],["Brot geschnitten","brot-2"]
+    ]},
+    { label: "🍰 Desserts", items: [
+      ["Obstplatte (Schokobrunnen)","obstplatte-1"],["Obstplatte (Schokobrunnen)","obstplatte-2"],["Obstplatte (Schokobrunnen)","obstplatte-3"],["Obstplatte (Schokobrunnen)","obstplatte-4"],["Obstplatte (Schokobrunnen)","obstplatte-5"],["Obstplatte (Schokobrunnen)","obstplatte-6"],
+      ["Schokokuchen","schokokuchen-1"],
+      ["Käsekuchen","kaesekuchen-1"],
+      ["Blechkuchen Obst","blechkuchen-1"],
+      ["Limokuchen","limokuchen-1"],
+      ["Marmorkuchen","marmorkuchen-1"],
+      ["Muffins (ca. 20 Stück)","muffins-1"],["Muffins (ca. 20 Stück)","muffins-2"]
+    ]},
+    { label: "🍿 Knabberkrams", items: [
+      ["Chips (5 Packungen)","chips-1"],["Chips (5 Packungen)","chips-2"],
+      ["Salzstangen (5 Packungen)","salzstangen-1"],
+      ["Salzbrezeln (5 Packungen)","salzbrezeln-1"]
+    ]}
   ];
 
   let selected = new Set();
@@ -158,17 +187,17 @@
       container.appendChild(lbl);
       const list = document.createElement('div');
       list.className = 'buffet-list';
-      group.items.forEach(item => {
-        const owner = (buffetData[item] && typeof buffetData[item] === 'string' && buffetData[item].length > 0) ? buffetData[item] : null;
-        const isSel = selected.has(item);
+      group.items.forEach(([label, id]) => {
+        const owner = (buffetData[id] && typeof buffetData[id] === 'string' && buffetData[id].length > 0) ? buffetData[id] : null;
+        const isSel = selected.has(id);
         const row = document.createElement('div');
         row.className = 'buffet-row' + (owner ? ' taken' : (isSel ? ' selected' : ''));
         row.innerHTML = `
           <div class="buffet-check">${(owner || isSel) ? '✓' : ''}</div>
-          <span class="buffet-row-name">${item}</span>
+          <span class="buffet-row-name">${label}</span>
           <span class="buffet-row-owner">${owner ? 'Fam. ' + owner : (isSel ? 'nochmal klicken zum Abwählen' : '')}</span>
         `;
-        if (!owner) row.onclick = () => { selected.has(item) ? selected.delete(item) : selected.add(item); renderBuffet(); };
+        if (!owner) row.onclick = () => { selected.has(id) ? selected.delete(id) : selected.add(id); renderBuffet(); };
         list.appendChild(row);
       });
       container.appendChild(list);
@@ -195,7 +224,9 @@
       familyBuffet[fam].push(gericht);
     });
     ul.innerHTML = familienData.map(e => {
-      const chips = (familyBuffet[e.name] || []).map(b => `<span class="entry-chip">${b}</span>`).join('');
+      const allItems = BUFFET_GROUPS.flatMap(g => g.items);
+      const idToLabel = Object.fromEntries(allItems.map(([label, id]) => [id, label]));
+      const chips = (familyBuffet[e.name] || []).map(id => `<span class="entry-chip">${idToLabel[id] || id}</span>`).join('');
       return `<li><span class="tag-family">Fam. ${e.name}</span><div class="entry-details"><span class="entry-chip">🧀 ${e.kaese}</span><span class="entry-chip">🌱 ${e.veggi}</span><span class="entry-chip">🌭 ${e.brat}</span><span class="entry-chip">🍡 ${e.nuernb}</span><span class="entry-chip">🍔 ${e.burger}</span>${chips}</div></li>`;
     }).join('');
   }
@@ -225,7 +256,7 @@
     }
 
     if (buffet.length > 0) {
-      const rows = buffet.map(g => ({ gericht: g, familie_name: name }));
+      const rows = buffet.map(id => ({ gericht: id, familie_name: name }));
       const { error: buffetError } = await sb.from('buffet').insert(rows);
       if (buffetError) {
         msg.className = 'err'; msg.textContent = 'Ein Gericht war bereits vergeben. Bitte neu auswählen.';
