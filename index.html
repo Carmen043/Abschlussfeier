@@ -89,6 +89,7 @@
     <h3>Grillgut <span style="font-size:12px;font-weight:400;color:#bbb">(Portionen)</span></h3>
     <div class="grill-row"><span class="grill-label">🧀 Grillkäse</span><input type="number" id="g_kaese" min="0" max="20" value="0"><span class="grill-unit">Stück</span></div>
     <div class="grill-row"><span class="grill-label">🌱 Veggi Wurst</span><input type="number" id="g_veggi" min="0" max="20" value="0"><span class="grill-unit">Stück</span></div>
+    <div class="grill-row"><span class="grill-label">🌭 Grillwurst</span><input type="number" id="g_brat" min="0" max="20" value="0"><span class="grill-unit">Stück</span></div>
     <div class="grill-row"><span class="grill-label">🍡 Nürnberger Würstl</span><input type="number" id="g_nuernb" min="0" max="20" value="0"><span class="grill-unit">Stück</span></div>
     <div class="grill-row"><span class="grill-label">🍔 Burger (klein)</span><input type="number" id="g_burger" min="0" max="20" value="0"><span class="grill-unit">Stück</span></div>
   </div>
@@ -226,7 +227,7 @@
       const allItems = BUFFET_GROUPS.flatMap(g => g.items);
       const idToLabel = Object.fromEntries(allItems.map(([label, id]) => [id, label]));
       const chips = (familyBuffet[e.name] || []).map(id => `<span class="entry-chip">${idToLabel[id] || id}</span>`).join('');
-      return `<li><span class="tag-family">Fam. ${e.name}</span><div class="entry-details"><span class="entry-chip">🧀 ${e.kaese}</span><span class="entry-chip">🌱 ${e.veggi}</span><span class="entry-chip">🍡 ${e.nuernb}</span><span class="entry-chip">🍔 ${e.burger}</span>${chips}</div></li>`;
+      return `<li><span class="tag-family">Fam. ${e.name}</span><div class="entry-details"><span class="entry-chip">🧀 ${e.kaese}</span><span class="entry-chip">🌱 ${e.veggi}</span><span class="entry-chip">🌭 ${e.brat}</span><span class="entry-chip">🍡 ${e.nuernb}</span><span class="entry-chip">🍔 ${e.burger}</span>${chips}</div></li>`;
     }).join('');
   }
 
@@ -234,6 +235,7 @@
     const name = document.getElementById('familyName').value.trim();
     const ka = parseInt(document.getElementById('g_kaese').value) || 0;
     const ve = parseInt(document.getElementById('g_veggi').value) || 0;
+    const br = parseInt(document.getElementById('g_brat').value) || 0;
     const nu = parseInt(document.getElementById('g_nuernb').value) || 0;
     const bu = parseInt(document.getElementById('g_burger').value) || 0;
     const buffet = Array.from(selected);
@@ -245,7 +247,7 @@
     btn.disabled = true;
     msg.className = ''; msg.textContent = 'Wird gespeichert...';
 
-    const { error: famError } = await sb.from('familien').insert({ name, kaese: ka, veggi: ve, nuernb: nu, burger: bu });
+    const { error: famError } = await sb.from('familien').insert({ name, kaese: ka, veggi: ve, brat: br, nuernb: nu, burger: bu });
     if (famError) {
       msg.className = 'err';
       msg.textContent = famError.code === '23505' ? 'Diese Familie hat sich bereits eingetragen.' : 'Fehler beim Speichern.';
@@ -268,6 +270,7 @@
     document.getElementById('familyName').value = '';
     document.getElementById('g_kaese').value = 0;
     document.getElementById('g_veggi').value = 0;
+    document.getElementById('g_brat').value = 0;
     document.getElementById('g_nuernb').value = 0;
     document.getElementById('g_burger').value = 0;
     selected = new Set();
