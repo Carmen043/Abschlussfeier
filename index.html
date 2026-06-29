@@ -87,11 +87,11 @@
   <div class="section">
     <div class="badge">Schritt 2 von 3</div>
     <h3>Grillgut <span style="font-size:12px;font-weight:400;color:#bbb">(Portionen)</span></h3>
-    <div class="grill-row"><span class="grill-label">🧀 Grillkäse</span><input type="number" id="g_kaese" min="0" max="20" value="0"><span class="grill-unit">Portionen</span></div>
-    <div class="grill-row"><span class="grill-label">🌱 Veggi Wurst</span><input type="number" id="g_veggi" min="0" max="20" value="0"><span class="grill-unit">Portionen</span></div>
-    <div class="grill-row"><span class="grill-label">🌭 Bratwurst</span><input type="number" id="g_brat" min="0" max="20" value="0"><span class="grill-unit">Portionen</span></div>
-    <div class="grill-row"><span class="grill-label">🍡 Nürnberger</span><input type="number" id="g_nuernb" min="0" max="20" value="0"><span class="grill-unit">Portionen</span></div>
-    <div class="grill-row"><span class="grill-label">🍔 Burger (klein)</span><input type="number" id="g_burger" min="0" max="20" value="0"><span class="grill-unit">Portionen</span></div>
+    <div class="grill-row"><span class="grill-label">🧀 Grillkäse</span><input type="number" id="g_kaese" min="0" max="20" value="0"><span class="grill-unit">Stück</span></div>
+    <div class="grill-row"><span class="grill-label">🌱 Veggi Wurst</span><input type="number" id="g_veggi" min="0" max="20" value="0"><span class="grill-unit">Stück</span></div>
+    <div class="grill-row"><span class="grill-label">🌭 Bratwurst</span><input type="number" id="g_brat" min="0" max="20" value="0"><span class="grill-unit">Stück</span></div>
+    <div class="grill-row"><span class="grill-label">🍡 Nürnberger Würstl</span><input type="number" id="g_nuernb" min="0" max="20" value="0"><span class="grill-unit">Stück</span></div>
+    <div class="grill-row"><span class="grill-label">🍔 Burger (klein)</span><input type="number" id="g_burger" min="0" max="20" value="0"><span class="grill-unit">Stück</span></div>
   </div>
 
   <div class="section">
@@ -212,7 +212,7 @@
     const bu = familienData.reduce((s,e) => s+(e.burger||0), 0);
     const div = document.getElementById('grillSummary');
     if (!familienData.length) { div.innerHTML = '<span class="empty">Noch keine Einträge</span>'; return; }
-    div.innerHTML = `<span class="summary-chip">🧀 Grillkäse: ${ka}</span><span class="summary-chip">🌱 Veggi: ${ve}</span><span class="summary-chip">🌭 Bratwurst: ${br}</span><span class="summary-chip">🍡 Nürnberger: ${nu}</span><span class="summary-chip">🍔 Burger: ${bu}</span>`;
+    div.innerHTML = `<span class="summary-chip">🧀 Grillkäse: ${ka}</span><span class="summary-chip">🌱 Veggi: ${ve}</span><span class="summary-chip">🌭 Bratwurst: ${br}</span><span class="summary-chip">🍡 Nürnberger Würstl: ${nu}</span><span class="summary-chip">🍔 Burger: ${bu}</span>`;
   }
 
   function renderList() {
